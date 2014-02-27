@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Bus Schedule</string>
+    <string name="action_settings">Settings</string>
+    <string name="route_name_field_hint">Enter partial or full name of a street.</string>
+    <string name="search_button_hint">Click to search</string>
+    <string name="title_route_detail">Bus Route Details</string>
+    <string name="route_label">Route</string>
+    <string name="stops_tab">Stops</string>
+    <string name="timetable_tab">Timetable</string>
+    <string name="title_activity_route_details">Route Details</string>
+    <string name="loading_msg">Loading...</string>
+    <string name="feed_error">Feed error!</string>
+    <string name="network_error">Network error!</string>
+
+</resources>
