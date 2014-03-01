@@ -14,7 +14,6 @@ import com.busschedule.app.server.RoutesAPI;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -39,10 +38,10 @@ public class StopsTabActivity extends Activity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onStop() {
         if (progress != null)
             progress.dismiss();
-        super.onDestroy();
+        super.onStop();
     }
 
     private class FindStopsAsyncTask extends AsyncTask<Integer, Void, List<Stop>> {
@@ -68,17 +67,15 @@ public class StopsTabActivity extends Activity {
         /*
         Runs the background task to retrieve data from API.
          */
-        protected List doInBackground(Integer... routeId) {
-            List<Stop> stops = new ArrayList<Stop>();
+        protected List<Stop> doInBackground(Integer... routeId) {
+            List<Stop> stops = null;
             try {
-                RoutesAPI api = new RoutesAPI();
+                RoutesAPI api = RoutesAPI.getInstance();
                 stops = api.findStops(routeId[0].intValue());
-            } catch (JSONException e1) {
-                e1.printStackTrace();
+            } catch (JSONException e) {
                 Toast.makeText(getParent(), getString(R.string.feed_error), Toast.LENGTH_SHORT).show();
-            } catch (IOException e2) {
+            } catch (IOException e) {
                 Toast.makeText(getParent(), getString(R.string.network_error), Toast.LENGTH_SHORT).show();
-                e2.printStackTrace();
             }
             return stops;
         }
@@ -90,7 +87,7 @@ public class StopsTabActivity extends Activity {
         protected void onPostExecute(List stops) {
             if (progress != null)
                 progress.dismiss();
-            ListView stopListView = (ListView) findViewById(R.id.stops_list_view);
+            ListView stopListView = (ListView) activity.findViewById(R.id.stops_list_view);
             stopListView.setAdapter(new StopsListAdapter(activity, stops));
         }
     }

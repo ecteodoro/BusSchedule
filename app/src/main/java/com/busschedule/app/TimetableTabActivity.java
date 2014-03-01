@@ -39,13 +39,13 @@ public class TimetableTabActivity extends Activity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onStop() {
         if (progress != null)
             progress.dismiss();
-        super.onDestroy();
+        super.onStop();
     }
 
-    private class FindDeparturesAsyncTask extends AsyncTask<Integer, Void, List<Stop>> {
+    private class FindDeparturesAsyncTask extends AsyncTask<Integer, Void, List<Departure>> {
 
         private Activity activity;
 
@@ -68,17 +68,15 @@ public class TimetableTabActivity extends Activity {
         /*
         Runs the background task to retrieve data from API.
          */
-        protected List doInBackground(Integer... routeId) {
-            List<Departure> departures = new ArrayList<Departure>();
+        protected List<Departure> doInBackground(Integer... routeId) {
+            List<Departure> departures = null;
             try {
-                RoutesAPI api = new RoutesAPI();
+                RoutesAPI api = RoutesAPI.getInstance();
                 departures = api.findDepartures(routeId[0].intValue());
-            } catch (JSONException e1) {
-                e1.printStackTrace();
+            } catch (JSONException e) {
                 Toast.makeText(getParent(), getString(R.string.feed_error), Toast.LENGTH_SHORT).show();
-            } catch (IOException e2) {
+            } catch (IOException e) {
                 Toast.makeText(getParent(), getString(R.string.network_error), Toast.LENGTH_SHORT).show();
-                e2.printStackTrace();
             }
             return departures;
         }
@@ -90,7 +88,7 @@ public class TimetableTabActivity extends Activity {
         protected void onPostExecute(List departures) {
             if (progress != null)
                 progress.dismiss();
-            ListView departuresListView = (ListView) findViewById(R.id.timetable_list_view);
+            ListView departuresListView = (ListView) activity.findViewById(R.id.timetable_list_view);
             departuresListView.setAdapter(new TimetableListAdapter(activity, departures));
         }
     }

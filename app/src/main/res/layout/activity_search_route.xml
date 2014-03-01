@@ -46,5 +46,7 @@
             android:id="@+id/routes_list_view"
             android:headerDividersEnabled="false"
             />
+
     </LinearLayout>
+
 </RelativeLayout>

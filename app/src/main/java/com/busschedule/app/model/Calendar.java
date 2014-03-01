@@ -4,6 +4,6 @@ public enum Calendar {
 
     WEEKDAY,
     SATURDAY,
-    SUNDAY;
+    SUNDAY
 
 }

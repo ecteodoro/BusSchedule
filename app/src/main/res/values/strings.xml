@@ -10,7 +10,7 @@
     <string name="stops_tab">Stops</string>
     <string name="timetable_tab">Timetable</string>
     <string name="title_activity_route_details">Route Details</string>
-    <string name="loading_msg">Loading...</string>
+    <string name="loading_msg">Loading…</string>
     <string name="feed_error">Feed error!</string>
     <string name="network_error">Network error!</string>
 

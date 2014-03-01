@@ -29,22 +29,34 @@ import java.util.List;
  */
 public class RoutesAPI {
 
-    private static String URL = "https://dashboard.appglu.com/v1/queries/";
-    private static String AUTH_HEADER = "Authorization";
-    private static String AUTH = "Basic V0tENE43WU1BMXVpTThWOkR0ZFR0ek1MUWxBMGhrMkMxWWk1cEx5VklsQVE2OA==";
-    private static String ENV_HEADER = "X-AppGlu-Environment";
-    private static String ENV = "staging";
-    private static String CONTENT_HEADER = "Content-Type";
-    private static String CONTENT_TYPE = "application/json;charset=UTF-8";
-    private static String ROUTE_RESOURCE_URI = "findRoutesByStopName/run";
-    private static String DEPARTURE_RESOURCE_URI = "findDeparturesByRouteId/run";
-    private static String STOP_RESOURCE_URI = "findStopsByRouteId/run";
+    private static final String URL = "https://dashboard.appglu.com/v1/queries/";
+    private static final String AUTH_HEADER = "Authorization";
+    private static final String AUTH = "Basic V0tENE43WU1BMXVpTThWOkR0ZFR0ek1MUWxBMGhrMkMxWWk1cEx5VklsQVE2OA==";
+    private static final String ENV_HEADER = "X-AppGlu-Environment";
+    private static final String ENV = "staging";
+    private static final String CONTENT_HEADER = "Content-Type";
+    private static final String CONTENT_TYPE = "application/json;charset=UTF-8";
+    private static final String ROUTE_RESOURCE_URI = "findRoutesByStopName/run";
+    private static final String DEPARTURE_RESOURCE_URI = "findDeparturesByRouteId/run";
+    private static final String STOP_RESOURCE_URI = "findStopsByRouteId/run";
+
+    private static RoutesAPI instance;
+
+    private RoutesAPI() {
+        super();
+    }
+
+    public static RoutesAPI getInstance() {
+        if (instance == null)
+            instance = new RoutesAPI();
+        return instance;
+    }
 
     //TODO there must be some space for refactoring the next 3 methods
 
     //TODO a 3rd party JSON parsing library would probably be more suitable
 
-    public List findRoutes(String stopName) throws JSONException, IOException {
+    public List<Route> findRoutes(String stopName) throws JSONException, IOException {
         StringEntity params = getParams("stopName", "%" + stopName.toLowerCase() + "%");
         String uri = URL + ROUTE_RESOURCE_URI;
         JsonReader reader = getJsonFeed(uri, params);
@@ -86,7 +98,7 @@ public class RoutesAPI {
         return routes;
     }
 
-    public List findDepartures(int routeId) throws JSONException, IOException {
+    public List<Departure> findDepartures(int routeId) throws JSONException, IOException {
         StringEntity params = getParams("routeId", Integer.toString(routeId));
         String uri = URL + DEPARTURE_RESOURCE_URI;
         JsonReader reader = getJsonFeed(uri, params);
@@ -128,7 +140,7 @@ public class RoutesAPI {
         return departures;
     }
 
-    public List findStops(int routeId) throws JSONException, IOException {
+    public List<Stop> findStops(int routeId) throws JSONException, IOException {
         StringEntity params = getParams("routeId", Integer.toString(routeId));
         String uri = URL + STOP_RESOURCE_URI;
         JsonReader reader = getJsonFeed(uri, params);

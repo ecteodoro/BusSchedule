@@ -38,6 +38,6 @@ public class Route implements Comparable<Route>{
 
     @Override
     public int compareTo(Route route) {
-        return Integer.valueOf(this.getShortName()) - Integer.valueOf(route.getShortName());
+        return this.getShortName().compareTo(route.getShortName());
     }
 }
