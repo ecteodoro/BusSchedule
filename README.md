@@ -9,14 +9,14 @@ Floripa Bus Schedule Application
 Screenshots
 ===========
 
-![alt tag](https://www.dropbox.com/s/hn133mgok5ezd61/Screenshot_2014-03-04-18-45-29.png?raw=true)  
+![Search screen](https://lh4.googleusercontent.com/-q3iP2EUmV48/UxZjk3CxOVI/AAAAAAAADfw/he7VJcJ0d1E/w272-h483-no/Screenshot_2014-03-04-18-45-29.png)  
 
-![alt tag](https://www.dropbox.com/s/cr7nyh673oi3b6t/Screenshot_2014-03-04-18-46-24.png)  
+![Tap on the map](https://lh4.googleusercontent.com/-DycSVGwJ4Tk/UxZjleQPcMI/AAAAAAAADf0/z3YfLvCq3iQ/w272-h483-no/Screenshot_2014-03-04-18-46-24.png)  
 
-![alt tag](https://www.dropbox.com/s/gsob37gdsntdu9m/Screenshot_2014-03-04-18-46-54.png)  
+![Loading routes](https://lh3.googleusercontent.com/-qbQVW4-gQds/UxZjk1AcRII/AAAAAAAADfs/bTozrt8jhBs/w272-h483-no/Screenshot_2014-03-04-18-46-54.png)  
 
-![alt tag](https://www.dropbox.com/s/n9g2xr1p7etqmhw/Screenshot_2014-03-04-18-47-00.png)  
+![Routes list](https://lh5.googleusercontent.com/-SBP835Z6Sbg/UxZjl49a_pI/AAAAAAAADf8/t1xsmowc0pw/w272-h483-no/Screenshot_2014-03-04-18-47-00.png)  
 
-![alt tag](https://www.dropbox.com/s/1y99q3vkaqspk3w/Screenshot_2014-03-04-18-47-10.png)  
+![Streets](https://lh5.googleusercontent.com/-eSJt7vV3H8k/UxZjmdHADbI/AAAAAAAADgE/mG8BKkrTLQE/w272-h483-no/Screenshot_2014-03-04-18-47-10.png)  
 
-![alt tag](https://www.dropbox.com/s/e57x998hvuyj5tx/Screenshot_2014-03-04-18-47-15.png)  
+![Timetable](https://lh3.googleusercontent.com/-5sUqaL9x7fU/UxZjnFfze4I/AAAAAAAADgM/-8Xtw21UBhg/w272-h483-no/Screenshot_2014-03-04-18-47-15.png)  
