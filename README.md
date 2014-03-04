@@ -9,7 +9,7 @@ Floripa Bus Schedule Application
 Screenshots
 ===========
 
-![alt tag](https://www.dropbox.com/s/hn133mgok5ezd61/Screenshot_2014-03-04-18-45-29.png)  
+![alt tag](https://www.dropbox.com/s/hn133mgok5ezd61/Screenshot_2014-03-04-18-45-29.png?raw=true)  
 
 ![alt tag](https://www.dropbox.com/s/cr7nyh673oi3b6t/Screenshot_2014-03-04-18-46-24.png)  
 
