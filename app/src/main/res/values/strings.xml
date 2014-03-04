@@ -13,5 +13,10 @@
     <string name="loading_msg">Loading…</string>
     <string name="feed_error">Feed error!</string>
     <string name="network_error">Network error!</string>
+    <string name="route_list_title">Routes</string>
+    <string name="finding_location">Finding location…</string>
+    <string name="location_not_found">Location not found.</string>
+    <string name="floripa">Florianópolis</string>
+    <string name="bus_routes_timetable">Bus Routes Timetable</string>
 
 </resources>

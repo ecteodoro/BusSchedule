@@ -9,13 +9,11 @@ import android.widget.Toast;
 
 import com.busschedule.app.adapter.TimetableListAdapter;
 import com.busschedule.app.model.Departure;
-import com.busschedule.app.model.Stop;
 import com.busschedule.app.server.RoutesAPI;
 
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,7 +33,7 @@ public class TimetableTabActivity extends Activity {
 
         Bundle params = getIntent().getExtras();
 
-        new FindDeparturesAsyncTask(this).execute(Integer.valueOf(params.getInt("id")));
+        new FindDeparturesAsyncTask(this).execute(params.getInt("id"));
     }
 
     @Override
@@ -72,7 +70,7 @@ public class TimetableTabActivity extends Activity {
             List<Departure> departures = null;
             try {
                 RoutesAPI api = RoutesAPI.getInstance();
-                departures = api.findDepartures(routeId[0].intValue());
+                departures = api.findDepartures(routeId[0]);
             } catch (JSONException e) {
                 Toast.makeText(getParent(), getString(R.string.feed_error), Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
@@ -85,7 +83,7 @@ public class TimetableTabActivity extends Activity {
         Dismiss progress dialog and fills the list with retrieved data.
         */
         @Override
-        protected void onPostExecute(List departures) {
+        protected void onPostExecute(List<Departure> departures) {
             if (progress != null)
                 progress.dismiss();
             ListView departuresListView = (ListView) activity.findViewById(R.id.timetable_list_view);

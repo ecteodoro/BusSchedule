@@ -34,7 +34,7 @@ public class StopsTabActivity extends Activity {
 
         Bundle params = getIntent().getExtras();
 
-        new FindStopsAsyncTask(this).execute(Integer.valueOf(params.getInt("id")));
+        new FindStopsAsyncTask(this).execute(params.getInt("id"));
     }
 
     @Override
@@ -71,7 +71,7 @@ public class StopsTabActivity extends Activity {
             List<Stop> stops = null;
             try {
                 RoutesAPI api = RoutesAPI.getInstance();
-                stops = api.findStops(routeId[0].intValue());
+                stops = api.findStops(routeId[0]);
             } catch (JSONException e) {
                 Toast.makeText(getParent(), getString(R.string.feed_error), Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
@@ -84,7 +84,7 @@ public class StopsTabActivity extends Activity {
        Dismiss progress dialog and fills the list with retrieved data.
         */
         @Override
-        protected void onPostExecute(List stops) {
+        protected void onPostExecute(List<Stop> stops) {
             if (progress != null)
                 progress.dismiss();
             ListView stopListView = (ListView) activity.findViewById(R.id.stops_list_view);

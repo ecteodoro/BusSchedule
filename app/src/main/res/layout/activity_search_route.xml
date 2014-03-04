@@ -1,12 +1,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.busschedule.app.SearchRouteActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                tools:context="com.busschedule.app.SearchRouteActivity">
 
     <LinearLayout
         android:orientation="vertical"
@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/stop_name_field"
                 android:inputType="text"
-                android:hint="@string/route_name_field_hint" />
+                android:hint="@string/route_name_field_hint"/>
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -38,14 +38,14 @@
                 android:scaleType="fitCenter"
                 style="?android:attr/borderlessButtonStyle"
                 android:adjustViewBounds="false"/>
+
         </LinearLayout>
 
-        <ListView
+        <fragment
+            android:id="@+id/map"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/routes_list_view"
-            android:headerDividersEnabled="false"
-            />
+            android:layout_height="match_parent"
+            android:name="com.google.android.gms.maps.MapFragment"/>
 
     </LinearLayout>
 

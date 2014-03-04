@@ -3,20 +3,19 @@ package com.busschedule.app;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Toast;
 
-import com.busschedule.app.adapter.RoutesListAdapter;
-import com.busschedule.app.model.Route;
-import com.busschedule.app.server.RoutesAPI;
-
-import org.json.JSONException;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,16 +26,20 @@ import java.util.List;
  */
 public class SearchRouteActivity extends Activity {
 
+    EditText stopNameField;
     private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_route);
+        stopNameField = (EditText) findViewById(R.id.stop_name_field);
+
+        drawMap();
     }
 
     /*
-    Dismiss the progress dialog if activity is destroyed.
+    Dismiss the progress dialog if activity is stopped.
     */
     @Override
     protected void onStop() {
@@ -50,10 +53,15 @@ public class SearchRouteActivity extends Activity {
     starts a background task to retrieve JSON data from a REST API.
     */
     public void findRoutes(View view) {
-        EditText stopNameField = (EditText) findViewById(R.id.stop_name_field);
         String stopName = stopNameField.getText().toString();
+
         hideKeyboard();
-        new FindRouteAsyncTask(this).execute(stopName);
+
+        Intent routeListActivity = new Intent(this, RouteListActivity.class);
+        Bundle params = new Bundle();
+        params.putString("stopName", stopName);
+        routeListActivity.putExtras(params);
+        this.startActivity(routeListActivity);
     }
 
     /*
@@ -66,12 +74,33 @@ public class SearchRouteActivity extends Activity {
         }
     }
 
+    private void drawMap() {
+        GoogleMap mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+        mMap.setMyLocationEnabled(true);
 
-    private class FindRouteAsyncTask extends AsyncTask<String, Void, List<Route>> {
+        LatLng floripa = new LatLng(-27.593500, -48.558540);
 
-        private Activity activity;
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(floripa, 13));
 
-        public FindRouteAsyncTask(Activity activity) {
+        mMap.addMarker(new MarkerOptions()
+                .title(getString(R.string.floripa))
+                .snippet(getString(R.string.bus_routes_timetable))
+                .position(floripa));
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                new ReverseGeocodingTask(SearchRouteActivity.this).execute(latLng);
+            }
+        });
+    }
+
+    private class ReverseGeocodingTask extends AsyncTask<LatLng, Void, String> {
+
+        Activity activity;
+
+        public ReverseGeocodingTask(Activity activity) {
+            super();
             this.activity = activity;
         }
 
@@ -81,51 +110,37 @@ public class SearchRouteActivity extends Activity {
         @Override
         protected void onPreExecute() {
             progress = new ProgressDialog(activity);
-            progress.setMessage(getString(R.string.loading_msg));
+            progress.setMessage(getString(R.string.finding_location));
             progress.setCancelable(false);
             progress.setIndeterminate(true);
             progress.show();
         }
 
-        /*
-        Runs the background task to retrieve data from API.
-         */
-        protected List<Route> doInBackground(String... stopName) {
-            List<Route> routes = null;
+        @Override
+        protected String doInBackground(LatLng... latLngs) {
+            Geocoder geocoder = new Geocoder(activity.getBaseContext());
+            double latitude = latLngs[0].latitude;
+            double longitude = latLngs[0].longitude;
+            List<Address> addresses;
+            String street = "";
             try {
-                RoutesAPI api = RoutesAPI.getInstance();
-                routes = api.findRoutes(stopName[0]);
-            } catch (JSONException e) {
-                Toast.makeText(getParent(), getString(R.string.feed_error), Toast.LENGTH_SHORT).show();
+                addresses = geocoder.getFromLocation(latitude, longitude, 1);
+                if (addresses != null && addresses.size() > 0) {
+                    street = addresses.get(0).getAddressLine(0);
+                    //this trick works only for brazilian address format
+                    street = street.split(",")[0];
+                }
             } catch (IOException e) {
-                Toast.makeText(getParent(), getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             }
-            return routes;
+            return street;
         }
 
-        /*
-        Dismiss progress dialog, fills the list with retrieved data
-        and define the behavior when a list item is selected.
-         */
         @Override
-        protected void onPostExecute(List<Route> routes) {
+        protected void onPostExecute(String street) {
             if (progress != null)
                 progress.dismiss();
-            ListView routeListView = (ListView) activity.findViewById(R.id.routes_list_view);
-            routeListView.setAdapter(new RoutesListAdapter(activity, routes));
-            routeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Route selectedRoute = (Route) adapterView.getItemAtPosition(i);
-                    Intent showRouteDetailsActivity = new Intent(activity, RouteDetailsActivity.class);
-                    Bundle params = new Bundle();
-                    params.putInt("id", selectedRoute.getId());
-                    params.putString("shortName", selectedRoute.getShortName());
-                    params.putString("longName", selectedRoute.getLongName());
-                    showRouteDetailsActivity.putExtras(params);
-                    activity.startActivity(showRouteDetailsActivity);
-                }
-            });
+            stopNameField.setText(street);
         }
+
     }
 }
