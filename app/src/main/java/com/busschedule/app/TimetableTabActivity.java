@@ -16,6 +16,8 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.List;
 
+import static com.busschedule.app.server.RoutesAPI.ID;
+
 /**
  * This activity shows a list of departure times.
  * It is displayed under the TIMETABLES tab.
@@ -33,7 +35,7 @@ public class TimetableTabActivity extends Activity {
 
         Bundle params = getIntent().getExtras();
 
-        new FindDeparturesAsyncTask(this).execute(params.getInt("id"));
+        new FindDeparturesAsyncTask(this).execute(params.getInt(ID));
     }
 
     @Override

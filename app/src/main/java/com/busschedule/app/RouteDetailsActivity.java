@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TabHost;
 
+import static com.busschedule.app.server.RoutesAPI.SHORT_NAME;
+
 public class RouteDetailsActivity extends TabActivity {
 
     @Override
@@ -14,7 +16,7 @@ public class RouteDetailsActivity extends TabActivity {
         setContentView(R.layout.activity_route_details);
 
         Bundle params = getIntent().getExtras();
-        String routeShortName = params.getString("shortName");
+        String routeShortName = params.getString(SHORT_NAME);
         this.setTitle(getString(R.string.route_label) + " " + routeShortName);
 
         TabHost tabHost = (TabHost) findViewById(android.R.id.tabhost);

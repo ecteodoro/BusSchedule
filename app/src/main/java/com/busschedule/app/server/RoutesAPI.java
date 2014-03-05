@@ -29,6 +29,17 @@ import java.util.List;
  */
 public class RoutesAPI {
 
+    public static final String STOP_NAME = "stopName";
+    public static final String ROWS = "rows";
+    public static final String ID = "id";
+    public static final String SHORT_NAME = "shortName";
+    public static final String LONG_NAME = "longName";
+    public static final String ROUTE_ID = "routeId";
+    public static final String CALENDAR = "calendar";
+    public static final String TIME = "time";
+    public static final String NAME = "name";
+    public static final String SEQUENCE = "sequence";
+
     private static final String URL = "https://dashboard.appglu.com/v1/queries/";
     private static final String AUTH_HEADER = "Authorization";
     private static final String AUTH = "Basic V0tENE43WU1BMXVpTThWOkR0ZFR0ek1MUWxBMGhrMkMxWWk1cEx5VklsQVE2OA==";
@@ -39,11 +50,12 @@ public class RoutesAPI {
     private static final String ROUTE_RESOURCE_URI = "findRoutesByStopName/run";
     private static final String DEPARTURE_RESOURCE_URI = "findDeparturesByRouteId/run";
     private static final String STOP_RESOURCE_URI = "findStopsByRouteId/run";
+    private static final String PARAMS = "params";
+    private static final String ENCODING = "UTF-8";
 
     private static RoutesAPI instance;
 
     private RoutesAPI() {
-        super();
     }
 
     public static RoutesAPI getInstance() {
@@ -57,13 +69,13 @@ public class RoutesAPI {
     //TODO a 3rd party JSON parsing library would probably be more suitable
 
     public List<Route> findRoutes(String stopName) throws JSONException, IOException {
-        StringEntity params = getParams("stopName", "%" + stopName.toLowerCase() + "%");
+        StringEntity params = getParams(STOP_NAME, "%" + stopName.toLowerCase() + "%");
         String uri = URL + ROUTE_RESOURCE_URI;
         JsonReader reader = getJsonFeed(uri, params);
         List<Route> routes = new ArrayList<Route>();
         reader.beginObject();
         while (reader.hasNext()) {
-            if (reader.nextName().equals("rows")) {
+            if (reader.nextName().equals(ROWS)) {
                 reader.beginArray();
                 while (reader.hasNext()) {
                     int id = -1;
@@ -74,11 +86,11 @@ public class RoutesAPI {
                     while (reader.hasNext()) {
                         key = reader.nextName();
                         if (key != null) {
-                            if (key.equals("id"))
+                            if (key.equals(ID))
                                 id = reader.nextInt();
-                            else if (key.equals("shortName"))
+                            else if (key.equals(SHORT_NAME))
                                 shortName = reader.nextString();
-                            else if (key.equals("longName"))
+                            else if (key.equals(LONG_NAME))
                                 longName = reader.nextString();
                             else
                                 reader.skipValue();
@@ -99,13 +111,13 @@ public class RoutesAPI {
     }
 
     public List<Departure> findDepartures(int routeId) throws JSONException, IOException {
-        StringEntity params = getParams("routeId", Integer.toString(routeId));
+        StringEntity params = getParams(ROUTE_ID, Integer.toString(routeId));
         String uri = URL + DEPARTURE_RESOURCE_URI;
         JsonReader reader = getJsonFeed(uri, params);
         List<Departure> departures = new ArrayList<Departure>();
         reader.beginObject();
         while (reader.hasNext()) {
-            if (reader.nextName().equals("rows")) {
+            if (reader.nextName().equals(ROWS)) {
                 reader.beginArray();
                 while (reader.hasNext()) {
                     int id = -1;
@@ -116,11 +128,11 @@ public class RoutesAPI {
                     while (reader.hasNext()) {
                         key = reader.nextName();
                         if (key != null) {
-                            if (key.equals("id"))
+                            if (key.equals(ID))
                                 id = reader.nextInt();
-                            else if (key.equals("calendar"))
+                            else if (key.equals(CALENDAR))
                                 calendar = Calendar.valueOf(reader.nextString());
-                            else if (key.equals("time"))
+                            else if (key.equals(TIME))
                                 time = reader.nextString();
                             else
                                 reader.skipValue();
@@ -141,13 +153,13 @@ public class RoutesAPI {
     }
 
     public List<Stop> findStops(int routeId) throws JSONException, IOException {
-        StringEntity params = getParams("routeId", Integer.toString(routeId));
+        StringEntity params = getParams(ROUTE_ID, Integer.toString(routeId));
         String uri = URL + STOP_RESOURCE_URI;
         JsonReader reader = getJsonFeed(uri, params);
         List<Stop> stops = new ArrayList<Stop>();
         reader.beginObject();
         while (reader.hasNext()) {
-            if (reader.nextName().equals("rows")) {
+            if (reader.nextName().equals(ROWS)) {
                 reader.beginArray();
                 while (reader.hasNext()) {
                     int id = -1;
@@ -159,13 +171,13 @@ public class RoutesAPI {
                     while (reader.hasNext()) {
                         key = reader.nextName();
                         if (key != null) {
-                            if (key.equals("id"))
+                            if (key.equals(ID))
                                 id = reader.nextInt();
-                            else if (key.equals("name"))
+                            else if (key.equals(NAME))
                                 name = reader.nextString();
-                            else if (key.equals("sequence"))
+                            else if (key.equals(SEQUENCE))
                                 sequence = reader.nextInt();
-                            else if (key.equals("route_id"))
+                            else if (key.equals(ROUTE_ID))
                                 route = reader.nextInt();
                             else
                                 reader.skipValue();
@@ -196,7 +208,7 @@ public class RoutesAPI {
         request.addHeader(CONTENT_HEADER, CONTENT_TYPE);
         request.setEntity(params);
         HttpResponse response = new DefaultHttpClient().execute(request);
-        return new JsonReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
+        return new JsonReader(new InputStreamReader(response.getEntity().getContent(), ENCODING));
     }
 
     /*
@@ -204,8 +216,8 @@ public class RoutesAPI {
      */
     private StringEntity getParams(String paramKey, String paramValue) throws JSONException, UnsupportedEncodingException {
         JSONObject params = new JSONObject();
-        params.put("params", new JSONObject().put(paramKey, paramValue));
-        return new StringEntity(params.toString(), "UTF-8");
+        params.put(PARAMS, new JSONObject().put(paramKey, paramValue));
+        return new StringEntity(params.toString(), ENCODING);
     }
 
 }

@@ -7,6 +7,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -20,13 +21,21 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.List;
 
+import static com.busschedule.app.server.RoutesAPI.STOP_NAME;
+
 /**
  * This activity displays a search field and a list
  * of routes that result from the search.
  */
 public class SearchRouteActivity extends Activity {
 
-    EditText stopNameField;
+    private static final double FLORIPA_LATITUDE = -27.593500;
+    private static final double FLORIPA_LONGITUDE = -48.558540;
+    private static final float INITIAL_ZOOM_LEVEL = 13;
+    private static final String LOG_TAG = "BusSchedule.app";
+    private static final String LOG_MSG = "Location not found";
+
+    private EditText stopNameField;
     private ProgressDialog progress;
 
     @Override
@@ -59,7 +68,7 @@ public class SearchRouteActivity extends Activity {
 
         Intent routeListActivity = new Intent(this, RouteListActivity.class);
         Bundle params = new Bundle();
-        params.putString("stopName", stopName);
+        params.putString(STOP_NAME, stopName);
         routeListActivity.putExtras(params);
         this.startActivity(routeListActivity);
     }
@@ -78,9 +87,9 @@ public class SearchRouteActivity extends Activity {
         GoogleMap mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         mMap.setMyLocationEnabled(true);
 
-        LatLng floripa = new LatLng(-27.593500, -48.558540);
+        LatLng floripa = new LatLng(FLORIPA_LATITUDE, FLORIPA_LONGITUDE);
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(floripa, 13));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(floripa, INITIAL_ZOOM_LEVEL));
 
         mMap.addMarker(new MarkerOptions()
                 .title(getString(R.string.floripa))
@@ -131,6 +140,7 @@ public class SearchRouteActivity extends Activity {
                     street = street.split(",")[0];
                 }
             } catch (IOException e) {
+                Log.e(LOG_TAG,  LOG_MSG);
             }
             return street;
         }

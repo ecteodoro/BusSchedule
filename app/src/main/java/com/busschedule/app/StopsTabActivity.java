@@ -16,6 +16,7 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.List;
 
+import static com.busschedule.app.server.RoutesAPI.ID;
 
 /**
  * This activity shows a list of streets (stops).
@@ -34,7 +35,7 @@ public class StopsTabActivity extends Activity {
 
         Bundle params = getIntent().getExtras();
 
-        new FindStopsAsyncTask(this).execute(params.getInt("id"));
+        new FindStopsAsyncTask(this).execute(params.getInt(ID));
     }
 
     @Override
